@@ -45,7 +45,7 @@ LOGGING = {
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'default_formatter',
-            'filename': '/var/log/ba_dl.log',
+            'filename': '/var/log/etoile_cinema_ba_dl.log',
             'maxBytes': 50000,
             'backupCount': 3,
         }

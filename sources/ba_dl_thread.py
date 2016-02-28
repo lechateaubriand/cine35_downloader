@@ -23,7 +23,7 @@ def main(csv_file):
     for each in whole_ba.ba_list:
         t = BaDownloadThread(each.title, each.ba_url, each.end_date, each.broadcast_dates, slide_template=ba_dl_variables.slide_template)
         t.start()
-        sleep(10)
+        sleep(60)
 
 
 class BandeAnnonce(object):
