@@ -23,7 +23,7 @@ def main(csv_file, ba_directory):
     for each in whole_ba.ba_list:
         t = BaDownloadThread(each.title, each.ba_url, each.end_date, each.broadcast_dates, ba_directory, slide_template=ba_dl_variables.slide_template)
         t.start()
-        sleep(60)
+        sleep(10)
 
 
 class BandeAnnonce(object):
@@ -90,8 +90,55 @@ class BaDownloadThread(threading.Thread):
         self.ba_directory = ba_directory
 
 
+    def _date_text_for_slide_creation(self):
+        i = 0
+        command=[]
+        if len(self.broadcast_dates) < 4:
+            for each in self.broadcast_dates:
+                if i == 0:
+                    command.append("-pointsize 45 -fill white -draw 'text 150,350 \"" + each + "\" ' ")
+                elif i == 1:
+                    command.append("-pointsize 45 -fill white -draw 'text 150,450 \"" + each + "\" ' ")
+                elif i == 2:
+                    command.append("-pointsize 45 -fill white -draw 'text 150,550 \"" + each + "\" ' ")
+                i = i+1
+        elif len(self.broadcast_dates) == 4:
+            for each in self.broadcast_dates:
+                if i == 0:
+                    command.append("-pointsize 42 -fill white -draw 'text 150,300 \"" + each + "\" ' ")
+                elif i == 1:
+                    command.append("-pointsize 42 -fill white -draw 'text 150,380 \"" + each + "\" ' ")
+                elif i == 2:
+                    command.append("-pointsize 42 -fill white -draw 'text 150,460 \"" + each + "\" ' ")
+                elif i == 3:
+                    command.append("-pointsize 42 -fill white -draw 'text 150,540 \"" + each + "\" ' ")
+                i = i+1
+        elif len(self.broadcast_dates) == 5:
+            for each in self.broadcast_dates:
+                if i == 0:
+                    command.append("-pointsize 35 -fill white -draw 'text 150,290 \"" + each + "\" ' ")
+                elif i == 1:
+                    command.append("-pointsize 35 -fill white -draw 'text 150,360 \"" + each + "\" ' ")
+                elif i == 2:
+                    command.append("-pointsize 35 -fill white -draw 'text 150,430 \"" + each + "\" ' ")
+                elif i == 3:
+                    command.append("-pointsize 35 -fill white -draw 'text 150,500 \"" + each + "\" ' ")
+                elif i == 4:
+                    command.append("-pointsize 35 -fill white -draw 'text 150,570 \"" + each + "\" ' ")
+                i = i+1
+        return command
+
+
+    def _title_text_for_slide_creation(self):
+        if len(self.title) <= 25:
+            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 65 -fill red -draw 'text 100,240 \"" + self.title + "\" ' "]
+        else:
+            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 55 -fill red -draw 'text 100,240 \"" + self.title + "\" ' "]
+        return command
+
+
     def run(self):
-        logging.info("in download_ba_from_youtube: %s, %s" % (self.ba_url, self.end_date))
+        logging.info("in download_ba_from_youtube: %s, %s, %s" % (self.title, self.ba_url, self.end_date))
         logging.info(str(type(self.end_date)))
 
         prefix = str(self.end_date.year) + "_" + str(self.end_date.month) + "_" + str(self.end_date.day) + "__"
@@ -105,9 +152,7 @@ class BaDownloadThread(threading.Thread):
 
         try:
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-                logging.debug("before extract_info")
                 info_dict = ydl.extract_info(self.ba_url, download=True)
-                logging.debug("after extract_info")
                 # sanitize_filename est applique par YoutubeDL quand restrictfilenames=True
                 # je le rappelle ici pour conserver le meme nom de fichier
                 video_title = youtube_dl.utils.sanitize_filename(info_dict.get("title", None), restricted=True)
@@ -121,27 +166,19 @@ class BaDownloadThread(threading.Thread):
 
         # traitement du slide
         if self.slide_template is not None:
-            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 65 -fill red -draw 'text 100,240 \"" + self.title + "\" ' "]
-            i = 0
-            for each in self.broadcast_dates:
-                if i == 0:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,350 \"" + each + "\" ' ")
-                elif i == 1:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,450 \"" + each + "\" ' ")
-                elif i == 2:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,550 \"" + each + "\" ' ")
-                i = i+1
+            command = self._title_text_for_slide_creation()
+            command.extend(self._date_text_for_slide_creation())
             command.append(self.slide_template)
             command.append(os.path.join(self.ba_directory, ''.join([prefix, video_title, '.jpg'])))
             decoded_command = map(lambda x: x.encode('utf-8'), command)
             final_command = ' '.join(decoded_command)
+            logging.info("command pour la creation du slide: %s" % final_command)
             logging.info("creating the slide for %s" % video_title)
             result = subprocess.call(final_command, shell=True)
             try:
                 assert result==0
             except:
                 logging.error("trouble in slide preparation for %s" % video_title)
-
 
 
 class BaDownloadAndFtpUploadThread(threading.Thread):
@@ -198,6 +235,7 @@ class BaDownloadAndFtpUploadThread(threading.Thread):
         except:
             logging.error("the file could not be uploaded to ftpserver")
             raise
+
     
 if __name__ == "__main__":
 
