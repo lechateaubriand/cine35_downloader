@@ -9,7 +9,7 @@ ba_directory = '/var/bande_annonces'
 ###############
 # SLIDES
 ###############
-slide_template = '/var/bande_annonces_slide/template_1.jpg'
+slide_template = '/var/bande_annonces_slide_template/template_1.jpg'
 
 
 ################
