@@ -48,9 +48,9 @@ class BandeAnnonceList(object):
     colonne 1: titre
     colonne 2: lien youtube
     colonne 3: end_date au format dd/mm/yyyy
-    colonne 4 a 6
+    colonne 4 a x: string contenant une date de diffusion
 
-    la classe BandeAnnonce ne contient qu'un attribut:
+    la classe BandeAnnonceList ne contient qu'un attribut:
     self.bande_annonce_list = []
     """
 
@@ -130,10 +130,14 @@ class BaDownloadThread(threading.Thread):
 
 
     def _title_text_for_slide_creation(self):
+        # si presence d'une apostrophe, il faut ajouter \\ devant l'apostrophe
+        # sinon plantage de la fonction convert
+        self.title = self.title.replace("'", "\\\\'")
+
         if len(self.title) <= 25:
-            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 65 -fill red -draw 'text 100,240 \"" + self.title + "\" ' "]
+            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 65 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
         else:
-            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 55 -fill red -draw 'text 100,240 \"" + self.title + "\" ' "]
+            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 55 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
         return command
 
 
@@ -145,7 +149,8 @@ class BaDownloadThread(threading.Thread):
 
         # traitement de la video    
         ydl_opts = {
-            'format': 'best[height=720]',
+            #'format': 'best[height=720]',
+            'format': 'best',
             'outtmpl': os.path.join(self.ba_directory, prefix + "%(title)s.%(ext)s"),
             'restrictfilenames': True,
         }
