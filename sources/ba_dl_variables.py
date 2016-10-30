@@ -45,13 +45,13 @@ LOGGING = {
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'default_formatter',
-            'filename': '/var/log/etoile_cinema_ba_dl.log',
+            'filename': '/var/log/cine35_telechargeur_ba/cine35_telechargeur_ba.log',
             'maxBytes': 50000,
             'backupCount': 3,
         }
     },
     'root': {
         'handlers': ['console', 'file'],
-        'level': 'DEBUG'
+        'level': 'INFO'
     }
 }
