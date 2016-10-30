@@ -8,7 +8,6 @@ import time
 import datetime
 from time import sleep, mktime, strptime
 import ba_dl_variables
-import ba_dl_thread
 from dbus.exceptions import DBusException
 import logging, logging.config
 logging.config.dictConfig(ba_dl_variables.LOGGING)
