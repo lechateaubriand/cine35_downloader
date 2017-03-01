@@ -65,19 +65,19 @@ class BandeAnnonceList(object):
             content = csv_file.readlines()
 
         for each in content:
-            line = map(lambda x: x.rstrip(), each.split(';'))
+            line = list(map(lambda x: x.rstrip(), each.split(';')))
             line_end_date = line[2].split('/')
             current_end_date = datetime.date(int(line_end_date[2]), int(line_end_date[1]), int(line_end_date[0]))
             
             # on enleve les dates vides dues a la sauvegarde excel vers csv
-            unfiltered_broadcast_dates = map(lambda x: x.decode('utf-8'), line[3:len(line)])
+            unfiltered_broadcast_dates = map(lambda x: x, line[3:len(line)])
             current_broadcast_dates = []
             for each in unfiltered_broadcast_dates:
                 if each != '':
                     current_broadcast_dates.append(each)
             
             # creation de la bande annonce complete
-            current_ba = BandeAnnonce(line[0].decode('utf-8'), line[1], current_end_date, current_broadcast_dates)
+            current_ba = BandeAnnonce(line[0], line[1], current_end_date, current_broadcast_dates)
             self.ba_list.append(current_ba)
 
 
@@ -183,7 +183,8 @@ class BaDownloadThread(threading.Thread):
             command.extend(self._date_text_for_slide_creation())
             command.append(self.slide_template)
             command.append(os.path.join(self.ba_directory, ''.join([prefix, video_title, '.jpg'])))
-            decoded_command = map(lambda x: x.encode('utf-8'), command)
+            #decoded_command = map(lambda x: x.encode('utf-8'), command)
+            decoded_command = list(map(lambda x: x, command))
             final_command = ' '.join(decoded_command)
             logging.info("command pour la creation du slide: %s" % final_command)
             logging.info("creating the slide for %s" % video_title)

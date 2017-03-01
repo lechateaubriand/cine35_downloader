@@ -3,13 +3,13 @@ import sys
 ################
 #  DIRECTORIES
 ################
-ba_directory = '/var/bande_annonces'
+ba_directory = '/var/cine35/trailer'
 
 
 ###############
 # SLIDES
 ###############
-slide_template = '/var/bande_annonces_slide_template/template_1.jpg'
+slide_template = '/var/cine35/slide_template/template_slide.jpg'
 
 
 ################
@@ -45,7 +45,7 @@ LOGGING = {
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'default_formatter',
-            'filename': '/var/log/cine35_telechargeur_ba/cine35_telechargeur_ba.log',
+            'filename': '/var/log/cine35_downloader/cine35_downloader.log',
             'maxBytes': 50000,
             'backupCount': 3,
         }
