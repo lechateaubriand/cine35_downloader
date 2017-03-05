@@ -12,6 +12,13 @@ ba_directory = '/var/cine35/trailer'
 slide_template = '/var/cine35/slide_template/template_slide.jpg'
 
 
+###############
+# DEFAULT VALUE FOR MENU
+###############
+default_file = '/tmp/cine35_download.csv'
+default_ba_dir = '/tmp'
+
+
 ################
 #   FTP SERVER
 ################
@@ -28,6 +35,7 @@ ftp_filematch = '*.mp4'
 ################
 #  LOGS
 ################
+log_file = '/var/log/cine35_downloader/cine35_downloader.log'
 LOGGING = {
     'version': 1,
     'formatters': {
@@ -45,7 +53,7 @@ LOGGING = {
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'default_formatter',
-            'filename': '/var/log/cine35_downloader/cine35_downloader.log',
+            'filename': log_file,
             'maxBytes': 50000,
             'backupCount': 3,
         }

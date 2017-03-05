@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
 import subprocess
@@ -23,7 +22,7 @@ def main(csv_file, ba_directory):
     for each in whole_ba.ba_list:
         t = BaDownloadThread(each.title, each.ba_url, each.end_date, each.broadcast_dates, ba_directory, slide_template=ba_dl_variables.slide_template)
         t.start()
-        sleep(10)
+        t.join()
 
 
 class BandeAnnonce(object):
@@ -39,6 +38,11 @@ class BandeAnnonce(object):
         self.end_date = end_date
         self.ba_url = ba_url
         self.broadcast_dates = broadcast_dates
+
+    def __str__(self):
+        to_join = [self.title, self.ba_url, str(self.end_date)]
+        to_join.extend(self.broadcast_dates)
+        return ";".join(to_join)
 
 
 class BandeAnnonceList(object):
