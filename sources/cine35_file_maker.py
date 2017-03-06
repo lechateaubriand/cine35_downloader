@@ -11,7 +11,7 @@ class ba_date(datetime.date):
     def __str__(self):
         months = ['fake', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
         'juillet', 'août', 'septembre', 'octobre', 'novembre', 'decembre']
-        weekday = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
+        weekday = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
         return weekday[self.weekday()] + ' ' + str(self.day) + ' ' + months[self.month]
 
 
