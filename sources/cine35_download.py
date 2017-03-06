@@ -65,7 +65,9 @@ class BandeAnnonceList(object):
 
     def parse(self, csv_file):
 
-        with open(csv_file, 'r') as csv_file:
+        utf8_csv_file = self._convert_to_utf8(csv_file)
+
+        with open(utf8_csv_file, 'r') as csv_file:
             content = csv_file.readlines()
 
         for each in content:
@@ -83,6 +85,29 @@ class BandeAnnonceList(object):
             # creation de la bande annonce complete
             current_ba = BandeAnnonce(line[0], line[1], current_end_date, current_broadcast_dates)
             self.ba_list.append(current_ba)
+
+    def _convert_to_utf8(self, csv_file):
+
+        tmp_file = "/tmp/" + os.path.basename(csv_file) + ".utf8.csv"
+
+        # find the file charset format using file command
+        command = "file -i " + csv_file
+        #charset_full = subprocess.run(command, check=True, stdout=subprocess.PIPE, encoding="utf-8").stdout
+        charset_full = subprocess.check_output(command, shell=True, universal_newlines=True)
+        charset = charset_full.split("=")[1].rstrip()
+
+        # convert to utf-8
+        if charset.lower() != "utf-8":
+            command = "iconv -f " + charset + " -t utf-8 " + csv_file + " -o " + tmp_file
+            print(command)
+            try:
+                subprocess.check_call(command, shell=True)
+                return tmp_file
+            except:
+                logging.error("problème au moment de la conversion du fichier en utf-8")
+                logging.error("convertir le fichier en utf8 avant de re-essayer")
+                raise
+        return csv_file
 
 
 class BaDownloadThread(threading.Thread):
