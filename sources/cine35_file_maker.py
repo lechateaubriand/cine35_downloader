@@ -29,18 +29,19 @@ def addTrailer(file):
 
     # titre
     while title == '':
-        title = input('titre de la bande-annonce ? ')
+        title = input('\ntitre de la bande-annonce ? \nutiliser \\n pour materialiser le retour à la ligne\n \
+exemple: Ma vie de courgette\\nCinépitchoune\n ')
         title = title or ''
     trailer.title = title
 
     # ba_url
-    ba_url = input('url youtube à charger: \n')
+    ba_url = input('\nurl youtube à charger: \n')
     ba_url = ba_url or ''
     trailer.ba_url = ba_url
 
     # broadcast_dates
     while True:
-        sdate = input('date de diffusion à ajouter [jj/mm/yyyy]: \n')
+        sdate = input('\ndate de diffusion à ajouter [jj/mm/yyyy]: \n')
         sdate = sdate or ''
         if sdate == '':
             break
@@ -52,7 +53,7 @@ def addTrailer(file):
             print("Date non valide, merci de recommencer")
             continue
 
-        hour = input('horaire: \n')
+        hour = input('\nhoraire: \n')
         hour = hour or ''
         broadcast_date = str(date) + ' à ' + hour
         trailer.broadcast_dates.append(broadcast_date)

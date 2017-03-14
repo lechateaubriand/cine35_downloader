@@ -125,43 +125,60 @@ class BaDownloadThread(threading.Thread):
         self.broadcast_dates = broadcast_dates
         self.end_date = end_date
         self.ba_directory = ba_directory
+        self.two_line_title = False
 
 
     def _date_text_for_slide_creation(self):
         i = 0
         command=[]
         if len(self.broadcast_dates) < 4:
+            vertical = 350
             for each in self.broadcast_dates:
                 if i == 0:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,350 \"" + each + "\" ' ")
+                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + "\"" + each + "\" ' ")
                 elif i == 1:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,450 \"" + each + "\" ' ")
+                    vertical = vertical + 100
+                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 2:
-                    command.append("-pointsize 45 -fill white -draw 'text 150,550 \"" + each + "\" ' ")
+                    vertical = vertical + 100
+                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 4:
+            vertical = 270
+            if self.two_line_title is True:
+                vertical = 270
             for each in self.broadcast_dates:
                 if i == 0:
-                    command.append("-pointsize 42 -fill white -draw 'text 150,300 \"" + each + "\" ' ")
+                    vertical = vertical + 80
+                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 1:
-                    command.append("-pointsize 42 -fill white -draw 'text 150,380 \"" + each + "\" ' ")
+                    vertical = vertical + 80
+                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 2:
-                    command.append("-pointsize 42 -fill white -draw 'text 150,460 \"" + each + "\" ' ")
+                    vertical = vertical + 80
+                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 3:
-                    command.append("-pointsize 42 -fill white -draw 'text 150,540 \"" + each + "\" ' ")
+                    vertical = vertical + 80
+                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 5:
+            vertical = 260
             for each in self.broadcast_dates:
                 if i == 0:
-                    command.append("-pointsize 35 -fill white -draw 'text 150,290 \"" + each + "\" ' ")
+                    vertical = vertical + 70
+                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 1:
-                    command.append("-pointsize 35 -fill white -draw 'text 150,360 \"" + each + "\" ' ")
+                    vertical = vertical + 70
+                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 2:
-                    command.append("-pointsize 35 -fill white -draw 'text 150,430 \"" + each + "\" ' ")
+                    vertical = vertical + 70
+                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 3:
-                    command.append("-pointsize 35 -fill white -draw 'text 150,500 \"" + each + "\" ' ")
+                    vertical = vertical + 70
+                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 elif i == 4:
-                    command.append("-pointsize 35 -fill white -draw 'text 150,570 \"" + each + "\" ' ")
+                    vertical = vertical + 70
+                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 i = i+1
         return command
 
@@ -169,13 +186,28 @@ class BaDownloadThread(threading.Thread):
     def _title_text_for_slide_creation(self):
         # si presence d'une apostrophe, il faut ajouter \\ devant l'apostrophe
         # sinon plantage de la fonction convert
-        self.title = self.title.replace("'", "\\\\'")
+        lines = self.title.partition("\\n")
 
-        if len(self.title) <= 25:
-            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 65 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
+        for each_line in lines:
+            title_line = each_line.replace("'", "\\\\'")
+
+        if len(lines[2]) == 0:
+            self.title = lines[0]
+            if len(self.title) <= 25:
+                command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
+                -pointsize 65 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
+                return command
+            else:
+                command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
+                -pointsize 55 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
+                return command
         else:
-            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf -pointsize 55 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
-        return command
+            self.two_line_title = True
+            command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
+            -pointsize 55 -fill red -draw \"text 100,200 '" + lines[0] + "' \" \
+            -pointsize 55 -fill red -draw \"text 120, 270 '" + lines[2] + "' \" "]
+            return command
+        raise Exception("Le titre " + self.title + " pose problème...")
 
 
     def run(self):
