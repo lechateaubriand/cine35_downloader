@@ -186,10 +186,8 @@ class BaDownloadThread(threading.Thread):
     def _title_text_for_slide_creation(self):
         # si presence d'une apostrophe, il faut ajouter \\ devant l'apostrophe
         # sinon plantage de la fonction convert
+        self.title = self.title.replace("'", "\\\\'")
         lines = self.title.partition("\\n")
-
-        for each_line in lines:
-            title_line = each_line.replace("'", "\\\\'")
 
         if len(lines[2]) == 0:
             self.title = lines[0]
