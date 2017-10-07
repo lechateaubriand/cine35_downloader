@@ -9,14 +9,14 @@ ba_directory = '/var/cine35/trailer'
 ###############
 # SLIDES
 ###############
-slide_template = '/var/cine35/slide_template/template_slide.jpg'
+slide_template = '/var/cine35/cine35_downloader/slide_template/template_slide.jpg'
 
 
 ###############
 # DEFAULT VALUE FOR MENU
 ###############
 default_file = '/tmp/cine35_download.csv'
-default_ba_dir = '/tmp'
+default_ba_dir = '/var/cine35/trailer'
 
 
 ################
@@ -26,9 +26,9 @@ ftp = False
 ftp_server = '192.168.1.12'
 #ftp_server = '127.0.0.1'
 ftp_port = '21'
-ftp_login = 'etoile'
-ftp_passwd = 'etoile'
-ftp_home_dir = '/home/etoile'
+ftp_login = ''
+ftp_passwd = ''
+ftp_home_dir = ''
 ftp_filematch = '*.mp4'
 
 

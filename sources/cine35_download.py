@@ -220,6 +220,7 @@ class BaDownloadThread(threading.Thread):
             'format': 'best',
             'outtmpl': os.path.join(self.ba_directory, prefix + "%(title)s.%(ext)s"),
             'restrictfilenames': True,
+            'nocheckcertificate': True,
         }
 
         try:
