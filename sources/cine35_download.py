@@ -138,52 +138,26 @@ class BaDownloadThread(threading.Thread):
             vertical = 100
         if len(self.broadcast_dates) < 4:
             vertical = vertical + 250
-            for each in self.broadcast_dates:
-                if i == 0:
-                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + "\"" + each + "\" ' ")
-                elif i == 1:
-                    vertical = vertical + 100
-                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 2:
-                    vertical = vertical + 100
-                    command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
+            i = 0
+            while i < len(self.broadcast_dates):
+                vertical = vertical + 100
+                command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 4:
             vertical = vertical + 170
             if self.two_line_title is True:
                 vertical = 270
-            for each in self.broadcast_dates:
-                if i == 0:
-                    vertical = vertical + 80
-                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 1:
-                    vertical = vertical + 80
-                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 2:
-                    vertical = vertical + 80
-                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 3:
-                    vertical = vertical + 80
-                    command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
+            i = 0
+            while i < len(self.broadcast_dates):
+                vertical = vertical + 80
+                command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
-        elif len(self.broadcast_dates) == 5:
+        elif len(self.broadcast_dates) > 4:
             vertical = vertical + 160
-            for each in self.broadcast_dates:
-                if i == 0:
-                    vertical = vertical + 70
-                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 1:
-                    vertical = vertical + 70
-                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 2:
-                    vertical = vertical + 70
-                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 3:
-                    vertical = vertical + 70
-                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
-                elif i == 4:
-                    vertical = vertical + 70
-                    command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
+            i = 0
+            while i < len(self.broadcast_dates):
+                vertical = vertical + 70
+                command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
         return command
 
