@@ -126,13 +126,18 @@ class BaDownloadThread(threading.Thread):
         self.end_date = end_date
         self.ba_directory = ba_directory
         self.two_line_title = False
+        self.slide_has_header = ba_dl_variables.slide_has_header
+        self.title_color = ba_dl_variables.title_color
 
 
     def _date_text_for_slide_creation(self):
         i = 0
         command=[]
+        vertical = 0
+        if self.slide_has_header:
+            vertical = 100
         if len(self.broadcast_dates) < 4:
-            vertical = 350
+            vertical = vertical + 250
             for each in self.broadcast_dates:
                 if i == 0:
                     command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + "\"" + each + "\" ' ")
@@ -144,7 +149,7 @@ class BaDownloadThread(threading.Thread):
                     command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 4:
-            vertical = 270
+            vertical = vertical + 170
             if self.two_line_title is True:
                 vertical = 270
             for each in self.broadcast_dates:
@@ -162,7 +167,7 @@ class BaDownloadThread(threading.Thread):
                     command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + each + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 5:
-            vertical = 260
+            vertical = vertical + 160
             for each in self.broadcast_dates:
                 if i == 0:
                     vertical = vertical + 70
@@ -188,22 +193,27 @@ class BaDownloadThread(threading.Thread):
         # sinon plantage de la fonction convert
         self.title = self.title.replace("'", "\\\\'")
         lines = self.title.partition("\\n")
+        vertical = 0
+        if self.slide_has_header:
+            vertical = 100
 
         if len(lines[2]) == 0:
             self.title = lines[0]
+            vertical = vertical + 140
             if len(self.title) <= 25:
                 command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
-                -pointsize 65 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
+                -pointsize 65 -fill " + self.title_color + " -draw \"text 100, " + str(vertical) + " '" + self.title + "' \" "]
                 return command
             else:
                 command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
-                -pointsize 55 -fill red -draw \"text 100,240 '" + self.title + "' \" "]
+                -pointsize 55 -fill " + self.title_color + " -draw \"text 100, " + str(vertical) + " '" + self.title + "' \" "]
                 return command
         else:
             self.two_line_title = True
+            vertical = vertical + 100
             command = ["convert -font /usr/share/fonts/truetype/freefont/FreeSansOblique.ttf \
-            -pointsize 55 -fill red -draw \"text 100,200 '" + lines[0] + "' \" \
-            -pointsize 55 -fill red -draw \"text 120, 270 '" + lines[2] + "' \" "]
+            -pointsize 55 -fill " + self.title_color + " -draw \"text 100, " + str(vertical) + " '" + lines[0] + "' \" \
+            -pointsize 55 -fill " + self.title_color + " -draw \"text 120, " + str(vertical + 70) + " '" + lines[2] + "' \" "]
             return command
         raise Exception("Le titre " + self.title + " pose problème...")
 
