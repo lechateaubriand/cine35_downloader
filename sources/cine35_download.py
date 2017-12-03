@@ -137,7 +137,7 @@ class BaDownloadThread(threading.Thread):
         if self.slide_has_header:
             vertical = 100
         if len(self.broadcast_dates) < 4:
-            vertical = vertical + 250
+            vertical = vertical + 150
             i = 0
             while i < len(self.broadcast_dates):
                 vertical = vertical + 100
