@@ -128,6 +128,7 @@ class BaDownloadThread(threading.Thread):
         self.two_line_title = False
         self.slide_has_header = ba_dl_variables.slide_has_header
         self.title_color = ba_dl_variables.title_color
+        self.date_color = ba_dl_variables.date_color
 
 
     def _date_text_for_slide_creation(self):
@@ -141,7 +142,7 @@ class BaDownloadThread(threading.Thread):
             i = 0
             while i < len(self.broadcast_dates):
                 vertical = vertical + 100
-                command.append("-pointsize 45 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
+                command.append("-pointsize 45 -fill " + self.date_color + " -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) == 4:
             vertical = vertical + 170
@@ -150,14 +151,14 @@ class BaDownloadThread(threading.Thread):
             i = 0
             while i < len(self.broadcast_dates):
                 vertical = vertical + 80
-                command.append("-pointsize 42 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
+                command.append("-pointsize 42 -fill " + self.date_color + " -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
         elif len(self.broadcast_dates) > 4:
             vertical = vertical + 160
             i = 0
             while i < len(self.broadcast_dates):
                 vertical = vertical + 70
-                command.append("-pointsize 35 -fill white -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
+                command.append("-pointsize 35 -fill " + self.date_color + " -draw 'text 150," + str(vertical) + " \"" + self.broadcast_dates[i] + "\" ' ")
                 i = i+1
         return command
 

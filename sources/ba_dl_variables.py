@@ -12,6 +12,7 @@ ba_directory = '/var/cine35/trailer'
 slide_template = '/var/cine35/cine35_downloader/slide_template/template_slide.jpg'
 slide_has_header = True
 title_color = "red"
+date_color = "white"
 
 
 ###############
