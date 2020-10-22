@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-from cursesmenu import *
-from cursesmenu.items import *
+from consolemenu import *
+from consolemenu.items import *
 from time import sleep
 import requests
 import json
@@ -72,7 +72,7 @@ def launch_downloader():
 
 
 # Create the menu
-menu = CursesMenu("Cine35 Downloader", "Choisissez l'une des options suivantes:")
+menu = ConsoleMenu("Cine35 Downloader", "Choisissez l'une des options suivantes:")
 
 # menu items
 file_factory_from_api = FunctionItem("Construire le fichier de download depuis le back office", make_file_from_api)
