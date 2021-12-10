@@ -75,12 +75,12 @@ def launch_downloader():
 menu = ConsoleMenu("Cine35 Downloader", "Choisissez l'une des options suivantes:")
 
 # menu items
-file_factory_from_api = FunctionItem("Construire le fichier de download depuis le back office", make_file_from_api)
+# file_factory_from_api = FunctionItem("Construire le fichier de download depuis le back office", make_file_from_api)
 file_factory_item = FunctionItem("Construire le fichier de download avec le menu", make_file_from_menu)
 download_item = FunctionItem("Lancer le downloader",  launch_downloader)
 
 # Once we're done creating them, we just add the items to the menu
-menu.append_item(file_factory_from_api)
+# menu.append_item(file_factory_from_api)
 menu.append_item(file_factory_item)
 menu.append_item(download_item)
 
